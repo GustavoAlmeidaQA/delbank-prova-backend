@@ -31,7 +31,13 @@ Instale as dependências do projeto com o comando abaixo:
 
 npm install express body-parser mysql2 mongoose ioredis amqplib
 
-Configuração do Banco de Dados MySQL
+Configuração do Banco de Dados NoSQL (MongoDB):
+
+Certifique-se de que está na url de connect certa.
+
+Url: mongodb://localhost:27017/crud_db
+
+Configuração do Banco de Dados MySQL:
 
 Certifique-se de que o serviço MySQL está ativo.
 
