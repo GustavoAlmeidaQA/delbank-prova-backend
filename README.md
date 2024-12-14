@@ -74,6 +74,19 @@ Execução do Projeto
 
 Certifique-se de que os serviços MySQL, MongoDB, Redis e RabbitMQ estão em execução localmente.
 
+Certifique-se de que o Redis está instalado e em execução localmente.
+
+Acesse o diretório que foi feita a instalação do redis.
+Para verificar, execute o seguinte comando no terminal:
+redis-cli ping
+
+Se o Redis estiver funcionando corretamente, o retorno será:
+PONG
+
+Caso esteja tudo correto, basta listar o cache com o comando:
+Keys * (Retorna todas as chaves no banco de dados atual)
+GET <key> (Retorna o valor associado a uma chave específica)
+
 Inicie o servidor com o comando:
 
 node index.js
@@ -84,7 +97,7 @@ Funcionalidades
 
 Endpoints para DVDs
 
-Adicionar um novo DVDPOST /dvdsExemplo de requisição:
+Adicionar um novo DVD POST /dvds Exemplo de requisição:
 
 {
     "title": "Aventuras de Gustavo",
@@ -94,26 +107,26 @@ Adicionar um novo DVDPOST /dvdsExemplo de requisição:
     "copies": 1
 }
 
-Listar todos os DVDsGET /dvds
+Listar todos os DVDs GET /dvds
 
-Obter detalhes de um DVD específicoGET /dvds/:id
+Obter detalhes de um DVD específico GET /dvds/:id
 
-Atualizar informações de um DVDPUT /dvds/:id
+Atualizar informações de um DVD PUT /dvds/:id
 
-Excluir um DVDDELETE /dvds/:id
+Excluir um DVD DELETE /dvds/:id
 
 Endpoints para Diretores
 
-Adicionar um novo diretorPOST /directorsExemplo de requisição:
+Adicionar um novo diretor POST /directors Exemplo de requisição:
 
 {
   "name": "Gustavo",
   "surname": "Almeida"
 }
 
-Listar todos os diretoresGET /directors
+Listar todos os diretores GET /directors
 
-Obter detalhes de um diretor específicoGET /directors/:id
+Obter detalhes de um diretor específico GET /directors/:id
 
 Atualizar informações de um diretorPUT /directors/:id
 
