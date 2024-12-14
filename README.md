@@ -1,207 +1,114 @@
-# delbank-prova-backend
+Projeto CRUD com MySQL, MongoDB, Redis e RabbitMQ
 
-Projeto de Gestão de DVDs e Diretores
+Este é um projeto de exemplo que utiliza Node.js com integração de múltiplos serviços: MySQL, MongoDB, Redis e RabbitMQ. Ele fornece um sistema de CRUD para gerenciar DVDs e diretores. O projeto utiliza filas para comunicação assíncrona e cache para otimização de consultas.
 
-Este é um sistema que utiliza um conjunto de tecnologias e integrações para gerenciar DVDs e diretores. Ele oferece endpoints RESTful para realizar operações CRUD, cache com Redis, fila de mensagens com RabbitMQ e suporte a banco de dados MySQL e MongoDB.
+Dependências Externas
 
-Tecnologias utilizadas
+Certifique-se de ter as seguintes ferramentas instaladas no seu ambiente:
 
-Node.js: Ambiente de execução para JavaScript no servidor.
+Node.js (versão 14 ou superior): https://nodejs.org/
 
-Express: Framework para criar a API REST.
+MySQL: https://dev.mysql.com/doc/refman/8.0/en/installing.html
 
-MySQL: Banco de dados relacional para armazenar informações primárias sobre DVDs e diretores.
+MongoDB: https://www.mongodb.com/docs/manual/installation/
 
-MongoDB: Banco de dados NoSQL para armazenamento paralelo das informações, com suporte a operações baseadas em mensagens.
+Redis: https://redis.io/docs/getting-started/installation/
 
-Redis: Sistema de cache para otimizar o acesso aos dados.
+RabbitMQ: https://www.rabbitmq.com/download.html
 
-RabbitMQ: Sistema de filas de mensagens para sincronização entre os bancos de dados.
+*TODAS AS DEPENDÊNCIAS FORAM INSTALADAS LOCALMENTE*
 
-Dependências do projeto
+Configuração do Projeto
 
-Este projeto utiliza os seguintes pacotes e bibliotecas:
+1. Clonar o repositório
 
-Dependências principais:
+git clone https://github.com/seu-usuario/delbank-prova-backend.git
+cd delbank-prova-backend
 
-express: Para criar rotas e gerenciar requisições HTTP.
+2. Instalar dependências
 
-body-parser: Para processar o corpo das requisições HTTP no formato JSON.
+Instale as dependências do projeto com o comando abaixo:
 
-mysql2: Para integração com o banco de dados MySQL.
+npm install express body-parser mysql2 mongoose ioredis amqplib
 
-mongoose: Para conexão e modelagem de dados no MongoDB.
+Configuração do Banco de Dados MySQL
 
-ioredis: Cliente para integração com Redis.
+Certifique-se de que o serviço MySQL está ativo.
 
-amqplib: Biblioteca para interação com RabbitMQ.
+Crie um banco de dados chamado crud_db com o comando:
 
-Dependências de desenvolvimento:
+CREATE DATABASE crud_db;
 
-nodemon (opcional): Para reiniciar automaticamente o servidor durante o desenvolvimento.
+Execute os seguintes comandos SQL para criar as tabelas necessárias:
 
-Requisitos do ambiente
+CREATE TABLE directors (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    surname VARCHAR(255) NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deleted_at DATETIME
+);
 
-Antes de executar o projeto, assegure-se de ter as seguintes dependências instaladas localmente:
-
-Node.js: Versão 14 ou superior.
-
-Redis: Serviço em execução na porta padrão (6379).
-
-RabbitMQ: Serviço em execução na porta padrão (5672).
-
-MongoDB: Serviço em execução na porta padrão (27017).
-
-MySQL: Serviço configurado com um banco de dados chamado crud_db.
-
-Configuração do ambiente
-
-Clone o repositório:
-
-git clone <URL_DO_REPOSITORIO>
-cd <PASTA_DO_PROJETO>
-
-Instale as dependências:
-
-npm install
-
-Configure as variáveis de ambiente:
-
-Crie um arquivo .env na raiz do projeto com as seguintes configurações (modifique conforme seu ambiente):
-
-MYSQL_HOST=localhost
-MYSQL_USER=root
-MYSQL_PASSWORD=guest
-MYSQL_DATABASE=crud_db
-
-RABBITMQ_URL=amqp://localhost
-PORT=3000
-
-Configure o banco de dados MySQL:
-
-Execute os comandos SQL abaixo para criar as tabelas necessárias:
-
-CREATE DATABASE IF NOT EXISTS crud_db;
-
-USE crud_db;
-
-CREATE TABLE IF NOT EXISTS dvds (
+CREATE TABLE dvds (
     id INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     genre VARCHAR(100) NOT NULL,
     director_id INT NOT NULL,
     release_date DATE NOT NULL,
     copies INT NOT NULL,
-    available BOOLEAN NOT NULL
+    available BOOLEAN DEFAULT TRUE,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deleted_at DATETIME,
+    FOREIGN KEY (director_id) REFERENCES directors(id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS directors (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    surname VARCHAR(100) NOT NULL
-);
+Execução do Projeto
 
-Execução do projeto
+Certifique-se de que os serviços MySQL, MongoDB, Redis e RabbitMQ estão em execução localmente.
 
-Certifique-se de que os seguintes serviços estão em execução:
-
-Redis
-
-RabbitMQ
-
-MongoDB
-
-MySQL
-
-Inicie o servidor:
+Inicie o servidor com o comando:
 
 node index.js
 
-Acesse a API:
-O servidor estará rodando em: http://localhost:3000
+O servidor estará disponível em http://localhost:3000.
 
-Endpoints da API
+Funcionalidades
 
-DVDs
+Endpoints para DVDs
 
-Criar DVD
-
-POST /dvds
-
-Corpo da requisição:
+Adicionar um novo DVDPOST /dvdsExemplo de requisição:
 
 {
-  "title": "Titulo do Filme",
-  "genre": "Gênero",
-  "directorId": 1,
-  "releaseDate": "2024-12-01",
-  "copies": 10
+    "title": "Aventuras de Gustavo",
+    "genre": "Comédia",
+    "directorId": 1,
+    "releaseDate": "2005-05-05",
+    "copies": 1
 }
 
-Listar DVDs
+Listar todos os DVDsGET /dvds
 
-GET /dvds
+Obter detalhes de um DVD específicoGET /dvds/:id
 
-Obter DVD por ID
+Atualizar informações de um DVDPUT /dvds/:id
 
-GET /dvds/:id
+Excluir um DVDDELETE /dvds/:id
 
-Atualizar DVD
+Endpoints para Diretores
 
-PUT /dvds/:id
-
-Corpo da requisição:
+Adicionar um novo diretorPOST /directorsExemplo de requisição:
 
 {
-  "title": "Novo Titulo",
-  "genre": "Novo Gênero",
-  "directorId": 2,
-  "releaseDate": "2024-12-10",
-  "copies": 5
+  "name": "Gustavo",
+  "surname": "Almeida"
 }
 
-Excluir DVD
+Listar todos os diretoresGET /directors
 
-DELETE /dvds/:id
+Obter detalhes de um diretor específicoGET /directors/:id
 
-Diretores
+Atualizar informações de um diretorPUT /directors/:id
 
-Criar Diretor
-
-POST /directors
-
-Corpo da requisição:
-
-{
-  "name": "Nome",
-  "surname": "Sobrenome"
-}
-
-Listar Diretores
-
-GET /directors
-
-Obter Diretor por ID
-
-GET /directors/:id
-
-Atualizar Diretor
-
-PUT /directors/:id
-
-Corpo da requisição:
-
-{
-  "name": "Novo Nome",
-  "surname": "Novo Sobrenome"
-}
-
-Excluir Diretor
-
-DELETE /directors/:id
-
-Integrações
-
-RabbitMQ: Utilizado para sincronizar dados entre o MySQL e MongoDB.
-
-Redis: Cache implementado para otimizar o tempo de resposta dos endpoints.
+Excluir um diretorDELETE /directors/:id
