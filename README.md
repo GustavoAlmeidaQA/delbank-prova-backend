@@ -4,48 +4,48 @@ Este é um projeto de exemplo que utiliza Node.js com integração de múltiplos
 
 Dependências Externas
 
-Certifique-se de ter as seguintes ferramentas instaladas no seu ambiente:
+Certifique-se de ter as seguintes ferramentas instaladas localmente no seu ambiente:
 
-Node.js (versão 14 ou superior): https://nodejs.org/
+Node.js (versão 14 ou superior): Download Node.js
 
-MySQL: https://dev.mysql.com/doc/refman/8.0/en/installing.html
+MySQL: Guia de Instalação do MySQL
 
-MongoDB: https://www.mongodb.com/docs/manual/installation/
+MongoDB: Guia de Instalação do MongoDB
 
-Redis: https://redis.io/docs/getting-started/installation/
+Redis: Guia de Instalação do Redis
 
-RabbitMQ: https://www.rabbitmq.com/download.html
+RabbitMQ: Guia de Instalação do RabbitMQ
 
-*TODAS AS DEPENDÊNCIAS FORAM INSTALADAS LOCALMENTE*
+Observação: Todas as dependências mencionadas acima devem ser instaladas e configuradas localmente para a execução do projeto.
 
 Configuração do Projeto
 
-1. Clonar o repositório
+1. Clonar o Repositório
 
 git clone https://github.com/seu-usuario/delbank-prova-backend.git
 cd delbank-prova-backend
 
-2. Instalar dependências
+2. Instalar Dependências
 
-Instale as dependências do projeto com o comando abaixo:
+Instale as dependências necessárias do projeto com o comando abaixo:
 
 npm install express body-parser mysql2 mongoose ioredis amqplib
 
-Configuração do Banco de Dados NoSQL (MongoDB):
+3. Configuração do Banco de Dados NoSQL (MongoDB)
 
-Certifique-se de que está na url de connect certa.
+Certifique-se de que o MongoDB está em execução localmente e use a seguinte URL de conexão:
 
-Url: mongodb://localhost:27017/crud_db
+mongodb://localhost:27017/crud_db
 
-Configuração do Banco de Dados MySQL:
+4. Configuração do Banco de Dados Relacional (MySQL)
 
-Certifique-se de que o serviço MySQL está ativo.
+Certifique-se de que o serviço MySQL está ativo e:
 
 Crie um banco de dados chamado crud_db com o comando:
 
 CREATE DATABASE crud_db;
 
-Execute os seguintes comandos SQL para criar as tabelas necessárias:
+Execute os comandos SQL abaixo para criar as tabelas necessárias:
 
 CREATE TABLE directors (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -70,34 +70,83 @@ CREATE TABLE dvds (
     FOREIGN KEY (director_id) REFERENCES directors(id) ON DELETE CASCADE
 );
 
-Execução do Projeto
-
-Certifique-se de que os serviços MySQL, MongoDB, Redis e RabbitMQ estão em execução localmente.
+5. Configuração do Redis
 
 Certifique-se de que o Redis está instalado e em execução localmente.
 
-Acesse o diretório que foi feita a instalação do redis.
-Para verificar, execute o seguinte comando no terminal:
+Acesse o diretório de instalação do Redis e verifique sua execução com o comando:
+
 redis-cli ping
 
 Se o Redis estiver funcionando corretamente, o retorno será:
+
 PONG
 
-Caso esteja tudo correto, basta listar o cache com o comando:
-Keys * (Retorna todas as chaves no banco de dados atual)
-GET <key> (Retorna o valor associado a uma chave específica)
+Utilize os seguintes comandos para manipular o cache durante os testes:
+
+KEYS *   # Retorna todas as chaves no banco de dados atual
+GET <key> # Retorna o valor associado a uma chave específica
+
+6. Configuração do RabbitMQ
+
+Certifique-se de que o RabbitMQ está instalado e em execução localmente.
+
+Acesse o painel de administração do RabbitMQ no navegador em:
+
+http://localhost:15672
+
+Use o login e senha padrão (guest/guest) para acessar o painel.
+
+Execução do Projeto
+
+Certifique-se de que os serviços MySQL, MongoDB, Redis e RabbitMQ estão em execução localmente.
 
 Inicie o servidor com o comando:
 
 node index.js
 
-O servidor estará disponível em http://localhost:3000.
+O servidor estará disponível em:
 
-Funcionalidades
+http://localhost:3000
+
+Funcionalidades do Sistema
+
+Endpoints para Diretores
+
+Adicionar um novo diretor
+
+POST /directors
+
+Exemplo de requisição:
+
+{
+    "name": "Gustavo",
+    "surname": "Almeida"
+}
+
+Listar todos os diretores
+
+GET /directors
+
+Obter detalhes de um diretor específico
+
+GET /directors/:id
+
+Atualizar informações de um diretor
+
+PUT /directors/:id
+
+Excluir um diretor
+
+DELETE /directors/:id
 
 Endpoints para DVDs
 
-Adicionar um novo DVD POST /dvds Exemplo de requisição:
+Adicionar um novo DVD
+
+POST /dvds
+
+Exemplo de requisição:
 
 {
     "title": "Aventuras de Gustavo",
@@ -107,27 +156,50 @@ Adicionar um novo DVD POST /dvds Exemplo de requisição:
     "copies": 1
 }
 
-Listar todos os DVDs GET /dvds
+Listar todos os DVDs
 
-Obter detalhes de um DVD específico GET /dvds/:id
+GET /dvds
 
-Atualizar informações de um DVD PUT /dvds/:id
+Obter detalhes de um DVD específico
 
-Excluir um DVD DELETE /dvds/:id
+GET /dvds/:id
 
-Endpoints para Diretores
+Atualizar informações de um DVD
 
-Adicionar um novo diretor POST /directors Exemplo de requisição:
+PUT /dvds/:id
 
-{
-  "name": "Gustavo",
-  "surname": "Almeida"
-}
+Excluir um DVD
 
-Listar todos os diretores GET /directors
+DELETE /dvds/:id
 
-Obter detalhes de um diretor específico GET /directors/:id
+Fluxo para Teste Completo
 
-Atualizar informações de um diretorPUT /directors/:id
+Criar um diretor:
 
-Excluir um diretorDELETE /directors/:id
+Use o endpoint POST /directors para criar um diretor.
+
+Criar um DVD:
+
+Use o endpoint POST /dvds para adicionar um DVD vinculado ao diretor criado anteriormente.
+
+Manipular os dados:
+
+Liste, atualize ou exclua os diretores e DVDs utilizando os respectivos endpoints.
+
+Verificar o cache no Redis:
+
+Após realizar requisições de listagem, use os comandos KEYS * e GET <key> para verificar se os dados estão sendo armazenados em cache corretamente.
+
+Verificar no MySQL:
+
+Acesse o banco de dados crud_db no MySQL e execute os comandos SELECT * FROM directors; e SELECT * FROM dvds; para verificar se os dados foram salvos corretamente.
+
+Verificar no RabbitMQ:
+
+Acesse o painel de administração do RabbitMQ em http://localhost:15672 e navegue até as filas para verificar se as mensagens relacionadas às operações CRUD estão sendo enviadas corretamente.
+
+Verificar no MongoDB:
+
+Acesse o banco de dados MongoDB e crie uma conexão local com a url fornecida (mongodb://127.0.0.1:27017/crud_db), assim poderá validar os dados que estão sendo inseridos.
+
+Com estas instruções, o sistema estará configurado para execução local e pronto para ser testado em sua totalidade.
