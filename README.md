@@ -81,23 +81,35 @@ Variáveis Utilizadas -
 As seguintes variáveis de ambiente são usadas para definir os parâmetros de conexão ao banco de dados MySQL:
 
 MYSQL_HOST: Endereço do servidor MySQL (padrão: localhost).
+
 MYSQL_USER: Nome de usuário para conexão (padrão: root).
+
 MYSQL_PASSWORD: Senha do banco de dados (padrão: guest).
+
 MYSQL_DATABASE: Nome do banco de dados (padrão: crud_db).
 
 Como Configurar:
 
 Linux/MacOS: Exporte as variáveis no terminal antes de iniciar o servidor:
+
 export MYSQL_HOST=seu_host
+
 export MYSQL_USER=seu_usuario
+
 export MYSQL_PASSWORD=sua_senha
+
 export MYSQL_DATABASE=seu_banco
 
 Windows: Defina as variáveis no terminal ou nas configurações do sistema:
+
 set MYSQL_HOST=seu_host
+
 set MYSQL_USER=seu_usuario
+
 set MYSQL_PASSWORD=sua_senha
+
 set MYSQL_DATABASE=seu_banco
+
 
 Validação das Variáveis - 
 Antes de iniciar o projeto, valide as variáveis de ambiente já configuradas no sistema:
